@@ -1,0 +1,13 @@
+{
+  "index": {
+    "fields": [
+      "agencyId",
+      "docType",
+      "transactionId",
+      "vanId"
+    ]
+  },
+  "ddoc": "agencyiddoctypetransactionidvanididxdoc",
+  "name": "agencyiddoctypetransactionidvanididx",
+  "type": "json"
+}

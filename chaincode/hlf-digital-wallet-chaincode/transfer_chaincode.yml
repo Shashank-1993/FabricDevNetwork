@@ -1,0 +1,27 @@
+- name: Prepare blockchain network
+  hosts: all
+  become: true
+  gather_facts: no
+  vars:
+    baseLocation: "/blockchain-data"
+    chaincodeLocation: "{{baseLocation}}/chaincode/v1"
+  tasks:
+    - name: Create config folder
+      file:
+        path: "{{item}}"
+        state: directory
+      loop:
+        - "{{chaincodeLocation}}/hlf_digital_wallet_chaincode"
+
+    - name: Copy chaincode
+      ansible.posix.synchronize:
+        src: "{{item}}"
+        dest: "{{chaincodeLocation}}/hlf_digital_wallet_chaincode/{{item}}"
+      loop:
+        - "package-lock.json"
+        - "package.json"
+        - "tsconfig.json"
+        - "tslint.json"
+        - "src/"
+
+   

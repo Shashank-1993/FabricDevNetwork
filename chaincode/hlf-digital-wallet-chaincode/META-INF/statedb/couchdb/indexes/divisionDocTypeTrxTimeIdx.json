@@ -1,0 +1,12 @@
+{
+  "index": {
+    "fields": [
+      "transactionTime",
+      "division",
+      "docType"
+    ]
+  },
+  "ddoc": "divisiondoctypetransactiontimeidxdoc",
+  "name": "divisiondoctypetransactiontimeidx",
+  "type": "json"
+}

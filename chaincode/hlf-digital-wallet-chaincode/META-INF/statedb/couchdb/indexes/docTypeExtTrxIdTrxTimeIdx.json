@@ -1,0 +1,12 @@
+{
+  "index": {
+    "fields": [
+      "docType",
+      "externalTransactionId",
+      "transactionTime"
+    ]
+  },
+  "ddoc": "doctypeexternaltransactionidtransactiontimeidxdoc",
+  "name": "doctypeexternaltransactionidtransactiontimeidx",
+  "type": "json"
+}

@@ -1,0 +1,101 @@
+export PATH=/Users/shashankawasthi/Documents/fabric-samples/bin:$PATH
+
+export FABRIC_CFG_PATH=${PWD}/sampleconfig
+
+configtxgen -profile SampleDevModeSolo -channelID syschannel -outputBlock genesisblock -configPath $FABRIC_CFG_PATH -outputBlock "$(pwd)/sampleconfig/genesisblock"
+
+
+configtxgen -channelID ch1 -outputCreateChannelTx ch1.tx -profile SampleSingleMSPChannel -configPath $FABRIC_CFG_PATH
+
+docker-compose up
+
+-----channel creation
+
+switch to new tab
+
+export PATH=/Users/shashankawasthi/Documents/fabric-samples/bin:$PATH
+export FABRIC_CFG_PATH=${PWD}/sampleconfig
+
+peer channel create -o 127.0.0.1:7050 -c ch1 -f ch1.tx
+
+
+peer channel join -b ch1.block
+=================>
+peer lifecycle chaincode package basic.tar.gz --path chaincode/chaincode-typescript/ --lang node --label mycc
+peer lifecycle chaincode package basic.tar.gz --path chaincode/hlf-digital-wallet-chaincode/ --lang node --label mycc
+peer lifecycle chaincode package basic.tar.gz --path chaincode/chaincode-javascript/ --lang node --label mycc
+
+FOR GO
+Navigate to chaincode folder
+
+create vendor folder
+G111MODULE=on go mod vendor
+
+build chaincode
+go build -o simplechaincode
+
+Start chaincode
+CORE_CHAINCODE_LOGLEVEL=debug CORE_PEER_TLS_ENABLED=false CORE_CHAINCODE_ID_NAME=mycc:1.0 ./simplechaincode --peer.address 127.0.0.1:7052
+
+CORE_CHAINCODE_LOGLEVEL=debug CORE_PEER_TLS_ENABLED=false CORE_CHAINCODE_ID_NAME=mycc:1.0 chaincode/chaincode-javascript --peer.address 127.0.0.1:7052
+
+Navigate to new tab
+
+export PATH=/Users/shashankawasthi/Documents/fabric-samples/bin:$PATH
+
+export FABRIC_CFG_PATH=${PWD}/sampleconfig
+
+peer lifecycle chaincode approveformyorg -o localhost:7050 --channelID ch1 --name mycc --version 1.0 --sequence 1  --init-required --signature-policy "OR ('SampleOrg.member')" --package-id mycc:1.0
+
+peer lifecycle chaincode checkcommitreadiness --channelID ch1 --name mycc --version 1.0 --sequence 1 --init-required --signature-policy "OR ('SampleOrg.member')" --output json
+
+peer lifecycle chaincode commit -o localhost:7050  --channelID ch1 --name mycc --version 1.0 --sequence 1 --init-required --signature-policy "OR ('SampleOrg.member')" --peerAddresses localhost:7051
+<==================
+
+
+
+
+
+
+Disable grpc thing in docker settings
+
+peer lifecycle chaincode package basic.tar.gz --path chaincode/javascript --lang node --label mycc
+
+peer lifecycle chaincode install basic.tar.gz --peerAddresses localhost:7051
+// if get image error here, manually install image
+docker pull --platform linux/x86_64 hyperledger/fabric-nodeenv:2.3
+
+peer lifecycle chaincode queryinstalled
+
+export CC_PACKAGE_ID=
+
+Navigate to folder containing package.json
+
+CORE_CHAINCODE_LOGLEVEL=debug CORE_PEER_ADDRESS=127.0.0.1:7052 CORE_PEER_TLS_ENABLED=false CORE_CHAINCODE_ID_NAME=$CC_PACKAGE_ID node_modules/.bin/fabric-chaincode-node start --peer.address 127.0.0.1:7052
+
+open new tab
+export PATH=/Users/shashankawasthi/Documents/fabric-samples/bin:$PATH
+export FABRIC_CFG_PATH=${PWD}/sampleconfig
+export CC_PACKAGE_ID=mycc:385f5530b15e113ad516d762a518a7c1c34b08f20ab13b963031988d95e82a16
+
+peer lifecycle chaincode approveformyorg -o localhost:7050 --channelID ch1 --name mycc --version 1.0 --sequence 1  --init-required --signature-policy "OR ('SampleOrg.member')" --package-id $CC_PACKAGE_ID 
+
+peer lifecycle chaincode checkcommitreadiness --channelID ch1 --name mycc --version 1.0 --sequence 1 --init-required --signature-policy "OR ('SampleOrg.member')" --output json
+
+peer lifecycle chaincode commit -o localhost:7050  --channelID ch1 --name mycc --version 1.0 --sequence 1 --init-required --signature-policy "OR ('SampleOrg.member')" --peerAddresses localhost:7051
+
+peer chaincode invoke -o localhost:7050 -C ch1 -n mycc --peerAddresses localhost:7051   -c '{"function":"initLedger","Args":[]}'
+
+for first method invoke use --isInit flag at last
+peer chaincode invoke -o localhost:7050 -C ch1 -n mycc --peerAddresses localhost:7051 -c '{"function":"initLedger","Args":[]}' --isInit
+
+
+
+peer chaincode invoke -o localhost:7050 -C ch1 -n mycc --peerAddresses localhost:7051 -c '{"function":"createSubscriptionOrder","Args":["FR4009705616","27","AEMZN557M8ywWmgI3SWr5oHLnbyyG_8vyw","cutoff","2022-04-06 00:00","s","q","500000","","","null"]}'
+
+peer chaincode invoke -o localhost:7050 -C ch1 -n mycc --peerAddresses localhost:7051 -c '{"function":"queryOrder","Args":["b9d56f4ed91817ac7501028dab21dc03"]}'
+
+peer chaincode invoke -o localhost:7050 -C ch1 -n mycc --peerAddresses localhost:7051 -c '{"function":"createRedemptionOrder","Args":["b9d56f4ed91817ac7501028dab21dc03","FR4009705616","27","AEMZN557M8ywWmgI3SWr5oHLnbyyG_8vyw","cutoff","2022-04-06 00:00","r","q","5000000","","","null"]}'
+
+updateOrderStatus to Settled
+peer chaincode invoke -o localhost:7050 -C ch1 -n mycc --peerAddresses localhost:7051 -c '{"function":"updateOrderStatus","Args":["b9d56f4ed91817ac7501028dab21dc03","garbage"]}'

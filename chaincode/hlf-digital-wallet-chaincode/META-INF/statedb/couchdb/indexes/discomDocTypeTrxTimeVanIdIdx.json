@@ -1,0 +1,13 @@
+{
+  "index": {
+    "fields": [
+      "transactionTime",
+      "discom",
+      "vanId",
+      "docType"
+    ]
+  },
+  "ddoc": "discomdoctypetransactiontimevanididxdoc",
+  "name": "discomdoctypetransactiontimevanididx",
+  "type": "json"
+}

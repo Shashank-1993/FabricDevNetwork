@@ -1,0 +1,11 @@
+{
+  "index": {
+    "fields": [
+      "billId",
+      "docType"
+    ]
+  },
+  "ddoc": "billiddoctypeidxdoc",
+  "name": "billiddoctypeidx",
+  "type": "json"
+}

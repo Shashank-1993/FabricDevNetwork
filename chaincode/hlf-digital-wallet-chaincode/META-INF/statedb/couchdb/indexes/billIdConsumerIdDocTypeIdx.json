@@ -1,0 +1,12 @@
+{
+  "index": {
+    "fields": [
+      "billId",
+      "consumerId",
+      "docType"
+    ]
+  },
+  "ddoc": "billidconsumeriddoctypeidxdoc",
+  "name": "billidconsumeriddoctypeidx",
+  "type": "json"
+}
